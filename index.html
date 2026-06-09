@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Fondos Centenario</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B1F3A;
+    --navy-mid: #163057;
+    --gold: #C5A84F;
+    --gold-light: #E8D08A;
+    --cream: #F8F5EE;
+    --cream-dark: #EDE9DF;
+    --white: #FFFFFF;
+    --text-primary: #0B1F3A;
+    --text-secondary: #4A5568;
+    --text-muted: #8A9AB5;
+    --green: #1A6B4A;
+    --green-light: #E8F5EE;
+    --amber: #B85C00;
+    --amber-light: #FFF3E0;
+    --border: rgba(11,31,58,0.12);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .phone-frame {
+    width: 390px;
+    height: 844px;
+    background: var(--cream);
+    border-radius: 44px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .screen {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: none;
+    flex-direction: column;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  .screen.active { display: flex; }
+  .screen::-webkit-scrollbar { display: none; }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 8px 0 16px;
+    flex-shrink: 0;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 4px;
+    transition: all 0.2s;
+  }
+  .nav-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-icon svg { width: 22px; height: 22px; }
+  .nav-label { font-size: 10px; font-weight: 500; color: var(--text-muted); }
+  .nav-item.active .nav-label { color: var(--navy); }
+  .nav-item.active .nav-icon svg { stroke: var(--navy); }
+  .nav-item:not(.active) .nav-icon svg { stroke: var(--text-muted); }
+
+  /* HOME SCREEN */
+  .home-hero {
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 60%, #1e3d6e 100%);
+    padding: 32px 24px 28px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .home-hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(197,168,79,0.08);
+  }
+  .home-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(197,168,79,0.05);
+  }
+  .hero-logo {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .logo-circle {
+    width: 46px; height: 46px;
+    background: var(--gold);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display';
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+    flex-shrink: 0;
+  }
+  .logo-text { color: white; min-width: 0; }
+  .logo-text .main { font-family: 'Playfair Display'; font-size: 18px; font-weight: 700; display: block; line-height: 1.2; white-space: nowrap; }
+  .logo-text .sub { font-size: 10px; color: rgba(255,255,255,0.55); letter-spacing: 1.8px; text-transform: uppercase; margin-top: 3px; display: block; white-space: nowrap; }
+
+  .hero-tagline {
+    font-family: 'Playfair Display';
+    font-size: 26px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .hero-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(197,168,79,0.15);
+    border: 1px solid rgba(197,168,79,0.3);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--gold-light);
+  }
+  .hero-badge-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; }
+
+  .section-title {
+    font-family: 'Playfair Display';
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .section-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  .home-content { padding: 24px 20px; }
+
+  .fondos-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+
+  .fondo-card-mini {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .fondo-card-mini:active { transform: scale(0.98); }
+  .fondo-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+  .fondo-icon.uyu { background: #E8F0FE; }
+  .fondo-icon.usd { background: #E6F4EA; }
+  .fondo-icon.idx { background: #FFF8E1; }
+  .fondo-icon.act { background: #FCE4EC; }
+  .fondo-info { flex: 1 }
+  .fondo-name { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; line-height: 1.3; }
+  .fondo-risk { font-size: 11px; color: var(--text-muted); }
+  .fondo-arrow { color: var(--text-muted); }
+  .fondo-arrow svg { width: 16px; height: 16px; stroke: var(--text-muted); }
+
+  .risk-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-top: 3px;
+  }
+  .risk-low { background: var(--green-light); color: var(--green); }
+  .risk-med { background: var(--amber-light); color: var(--amber); }
+
+  .partes-section { margin-bottom: 24px; }
+  .partes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .parte-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .parte-rol { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .parte-nombre { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+
+  /* FONDOS LIST */
+  .screen-header {
+    background: var(--navy);
+    padding: 20px 24px 24px;
+  }
+  .screen-header h1 {
+    font-family: 'Playfair Display';
+    font-size: 22px;
+    color: white;
+    font-weight: 600;
+  }
+  .screen-header p { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+  .fondos-list { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+
+  .fondo-card-full {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+  }
+  .fondo-card-full:active { transform: scale(0.99); }
+  .fondo-card-header {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .fondo-card-header-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .fondo-card-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .fondo-card-title { font-size: 14px; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
+  .fondo-card-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; padding: 12px 18px; }
+  .fondo-card-footer {
+    padding: 10px 18px;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-label { font-size: 11px; color: var(--text-muted); }
+  .ver-mas {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* DETAIL SCREEN */
+  .detail-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    padding: 20px 24px 32px;
+    position: relative;
+  }
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.7);
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 18px;
+    width: fit-content;
+  }
+  .back-btn svg { width: 16px; height: 16px; stroke: rgba(255,255,255,0.7); }
+  .detail-icon-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .detail-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+  .detail-title {
+    font-family: 'Playfair Display';
+    font-size: 20px;
+    color: white;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .detail-risk-wrap { margin-top: 14px; }
+
+  .detail-content { padding: 20px; }
+
+  .detail-section { margin-bottom: 24px; }
+  .detail-section-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .detail-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .docs-grid { display: flex; flex-direction: column; gap: 10px; }
+  .doc-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .doc-btn:active { background: var(--cream); }
+  .doc-icon {
+    width: 36px; height: 36px;
+    background: var(--cream);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+  .doc-info { flex: 1; }
+  .doc-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .doc-type { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .doc-arrow svg { width: 14px; height: 14px; stroke: var(--text-muted); }
+
+  /* INFO / CONTACTO */
+  .info-header {
+    background: var(--navy);
+    padding: 20px 24px 24px;
+  }
+  .info-header h1 {
+    font-family: 'Playfair Display';
+    font-size: 22px;
+    color: white;
+    font-weight: 600;
+  }
+  .info-header p { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+  .info-content { padding: 20px; }
+  .info-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+  .info-card-title {
+    font-family: 'Playfair Display';
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+  }
+  .info-card p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .contact-row:last-child { border-bottom: none; }
+  .contact-icon-wrap {
+    width: 36px; height: 36px;
+    background: var(--cream);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .contact-icon-wrap svg { width: 16px; height: 16px; stroke: var(--navy); }
+  .contact-info-text .label { font-size: 11px; color: var(--text-muted); }
+  .contact-info-text .value { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+
+  .partes-list { display: flex; flex-direction: column; gap: 10px; }
+  .parte-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+  }
+  .parte-row-rol { font-size: 11px; color: var(--text-muted); }
+  .parte-row-nombre { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .parte-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .partes-logos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .parte-logo-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 90px;
+  }
+  .parte-logo-card img {
+    height: 40px;
+    width: auto;
+    max-width: 110px;
+    object-fit: contain;
+  }
+  .parte-logo-rol {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 500;
+  }
+
+  .parte-logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    gap: 12px;
+  }
+  .parte-logo-info { flex: 1; min-width: 0; }
+  .parte-logo-img {
+    height: 28px;
+    width: auto;
+    max-width: 80px;
+    object-fit: contain;
+    filter: grayscale(20%);
+    flex-shrink: 0;
+  }
+
+  .gold-divider {
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), transparent);
+    border-radius: 2px;
+    margin: 0 24px 20px;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <!-- HOME -->
+  <div class="screen active" id="screen-home">
+    <div class="home-hero">
+      <div class="hero-logo">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAB+ANEDASIAAhEBAxEB/8QAHAAAAQQDAQAAAAAAAAAAAAAAAAUGBwgBAgME/8QAQBAAAQMEAAMFBQUGBQMFAAAAAQIDBAAFBhEHEiETMUFRYSJScZPRCBQygZEVI0JTobEWNmJjwXJ0giRDc4Px/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQF/8QAJxEAAgICAQQCAAcAAAAAAAAAAAECEQMSBBMhMUEiYTIzUXGRofD/2gAMAwEAAhEDEQA/ALg9in33vmq+tHYp9975qvrXSigOfYp9975qvrR2Kffe+ar61uSACSdAUjKyvHErUhV4iBSTojtB0NAK3Yp9975qvrR2Kffe+ar60lpyjH1d12in/wAxW6cjsau65xj/AOdAKPYp9975qvrR2Kffe+ar61ll1t5pLrSgtChtKh3EVvQHPsU++981X1o7FPvvfNV9a2WtKElS1BIHeSaQLpmVgt6ih2alax3pR1oBd7FPvvfNV9aOxT773zVfWmU5xMsSToNSCPPVeuBxDxuUsIVJUwT/ADBoUJaHV2Kffe+ar60din33vmq+taQ5kWY0HYr7byD4pVuu9CnPsU++981X1o7FPvvfNV9a6VpIfZjtlx51LaB3lR1QGOxT773zVfWjsU++981X1puXHOsehrKTK7ZQ8Gxukw8TrGFaLUjXnqhLQ9uxT773zVfWjsU++981X1pt2zPMcnLCBMDKz3BwapyMPNPthxlxK0nuKTsUKHYp9975qvrXN1sJIAce+ar616K4un2uooDjyn+a981X1rHKf5j3zVfWuns+VHs+RoQ58p/mvfNV9aOU/wAx75qvrXT2fI0ez61Qc+VX8x75qvrRXT2fI0UB6aKKKhTCgFJKT3EaqpPEK3G1Z3dYnLyp7crT8Fdf+atvUScV+G11yPJk3W1LjpSpkJcDiiDzDfp5aojMlZDEPvFLULvFJ8uC9bLm9AkFJdZVyq5T03ShC7xWjBZLDv8AK9u/7dH9q6ZDeoVkgKlS1ge6gd6j5CvNjT7cXDoUh5QShuKlRJ+FQxmmQvXy7OPrUQwglLSN9AKybbpHqyrMLpe3lJ7ZTEb+FpB109fOmytwDx2a4uPUs4pi9zyN4qYQWoqfxvKHQfDzqmfIiOPeteZx067jUnuYnJgI5LJipurwHWRPkBlsn0SNn9abl8f4m2ZCnXcBsjsUdT9324QP7/0rrHG5e1/IoblmyO62SUl+3y3GiDso3tJ+IqceHeewcnaEd7lj3BI9pvfRXqKhSHmGMXlz7rkWMrtjxOi9EV1SfVJpx47i0W03AZRGu7cu0sJ52ltnlWpfggjwqZMUofiRV2JdzHKIePRdrIdkrH7toH+pqGshyK53p9TkySrk37LaTpI/KvFe7rIudwdmSllS1nff0A8qS3HvWuZG7Oy3AO6vO47TqxTCrhemfv0kLjQh15uUla/+kUtycbvMRBRj2Ex5Gv8A37nLCSr15Ug/3rSViiMXXVetK+M5peMekpXGkqcY37TKztJH/Fe2+3fiJYAV3bh/aVxB3qYQVgD4jqK8EC/4Xkv7i5Wx6xSldA8wrnbB9QetdXx51a7iie8Kyy3ZRAD8VQQ8kfvGSeqTS4vqo1Wks3vh/eo93iPJlQFqHK+ydtuJ8j5GrC4/dY17s8a5xFBTT6Aoeh8RXCjV2e5Sa1rqR7NaEUBgDpWK3ArVXfQGKKPzooD1UUUVDQUUUUBV7O08ucXQf75rhC7xXs4iJ5c8uY/3a8cHvFU5slfNbsqDw3tcRtWlyWUg/wDSAKiVx71p38TpKhbbAxv2UwUq18aYDj3rQMcuE2R7JL+1BRsND2nV+6kd9WMtUCLbYLcOI0ltptOgAKjzgDbUtWCRc1J/eSHOUH/SKk2jNRQVggEaI2KzRUNEa8VuHEG9w3bnbI6Gbi0CrSBoOjy+NMS7pVZcUtdl0UOOI+8Pj1V3A1YWq88X5JVm0xHcG+VIHwFderJx0ZmQ2XXvWnbwrxj/ABFdzIkpP3KMQV/6j4CmE47VkOFNsRbcMiAJ04+O1WfMmuZlK2OllptlpLTSAhCRoADoK3ooqHQ1cQhxBQ4hK0kaII2DUL8YeHEVhteQWVgN8p3IZSOmveFTVXKWw3JjOx3UhSHElKgfEGumLI8crQornhlyDTC7Tc0/eLZIHK42rryb/iHlT/4PtyLDdbnij7hcYbIkwl76KaX5UxH7d9zu0mKB0adUkfkaknBmVSnrfN1t2KlcdZ80HRH6da9XKgmt0ZJBrQjrW1Cq8INR31orvrqa0Iqg0orbXpRQHooooqGgooooCs/E1PLn9yH+sf2pPhd4pV4qp5eINw9SD/SkmF3iqc2Oni2wpuzY7L17KoaUb9R/+1Gjr3rU9Z7Y13jhLCdYQVPxGEOpA7yNdarq69okHpRBlmeDFxYTidrg7AW8lxSfUjWx+lSFVZMNvsxnCVTbbtyfj8tMwMg9XGD0cT+hNWBw7JLXlNkYulrkJcbcSCpO/aQfEEeBrTh8djaYtUUUVgoVXLje0qLnMlR/C6lKx+lTlll+j2W3rUVBUhY003vqT51C/E6O9dsXi3rquREUW5B8eUnYNdFB67GZeCNy9+8Ts9NirWYZcGH7bHhIIC2YrS9eYI7/AOlVBde9aliw5i5Zbbj2Wp5nYTG7bdUJ6lCCdoX+RFSMdnRmLLC0V5bXPh3OC1NgvofjupCkLQdgivVWDoFYWoISVKOgBs1mmjxAyFqFCXb4rgVKeHKdH8A8a1CDm6QI5nlMm9S5I/Ct1RH60+OGZUES9fh2KY7SeVOvGpLwKCqLZg6tJCnzz/l4V7+Q0sdEHECrzrOzQPhWPGvngzs1jmPnWawaAxzK86KKKA9FFFFQoUUUUBXHi6NcQZvqEmkSF3il/jGnXECT6oSaQYQOxVObLIYmhDuJwG1pCkqjJBB8Rqq58b8Gk4zd13KG0pdrkqKkqSNhtXik+VWOw7/K9u/7dH9q9l1t8O6QHYM9hD8d1PKtChsGobq0Uuw7JXscvrU9CQ6yfYfaPc42eikn8qei27pickZXgs1bljlnnKE+0Gie9C0+GqUuJvA25w3HZ+K7lxztRjE+2n4edRjY8hyjBLi40qO802o8r8WQ2eRY8iDXbFl0f6ox4J1sfGuatlKZ9nQ45rqptet/lXvlcVLjMb5IMBuMT/EpXMRUXW3LOHt6IXLbkY/LV+MJTzsk+nlTmtv+EVlJYy6A6D3AA836V6U+O+9GkxQ+8S7hJMma8t1w95UacWLW165uPQlMdpDeQUP83dr60p4ljFvmoS8VSHme/mU2UJV8N99P6HEjw2QzGaS2geAFZy8iNaxKVB4m4pPw+/ORJDajFWSqO9rotP1FcMByWJbZEi1XlBds1yR2UlPfyeSx6g9atpluOWvJ7Su3XWOl1tX4Va9pB8warPxG4L5HYnHJNnbXc4I2R2Y24keorxpmWq8Hsgzcs4aTk/sub99skg88dZ9tpxJ9fA0/rZxpedZAk2UdprqUOdKgrGM4veKpXarjCM22qOnIcpJ0PhvuNPG2X7hzddONzpFkeV3tPo5kA+hr2LLiyfmLuEyR5/Eq73FBbhx0Q0q6cwO1UkR+1dWX31qWtXUqUdk157U3i7i0pj5RDkE9yWklSj+QqTMXxW3rbTIebfcT3pDqOUH8q6dXFjXxNCFidgeuclLzqSmMg7JP8XoKkxttLaEoSNJSNAUIbbaSG20BCR0AA7q2rx5cjyMBWtb6rXzrkA6etYrbVZAoDTR86K6UUBvRRRQoUUVFnH3iTNwqLbrTYYyJV+uznZxkr/Cgb1zEePU1vHB5JaxI2krY/rhjtjuEoyptrivvEaK1tgmuScUx1P4bPDH/ANYqOeHti40M5BBuOU5Rb37cvapMNtnSkgg6AOvPVNrjnmmbweLdtxTGsgiWhiXHCi5JQnkSrzJNdY8dynqpIw5pK2iwMdlphlDLKAhtA0lIHQCulR7wgGXItE9zKcmtt9d5/wBy5C1yoGu46qH+HPGzJG+L8yzZRLDtlemORGF9mEhpYV7PUenSkeNKW2ruiuaVX7LRV4rnabXc2+zuNviy0+TzSVf3FRdwVzG/5Jm+Y265TEvRre+EREhAHIPiO+o54oZDxrw/Jbdb3sot6kXaQW4oQwDyAnpzbFWPGk56WrI8iSsnZzhrgjjnOrF7bv0ZApWtOLY5aSFW6yQIqh3KbYSD+uqaNjTneP8ADe8yssu8WddmW3HWHmG9JSkJ6DWvPdQ5wzyfizmEJi6jiDZIbJk9mqNIShLigCN6GvGpHjuSbtUg5pV2LU0VDn2ncwyXDcFt02wTUszXZKGlrCArm2PDdMy4cZ77N4IMXiFKTEyGJMRFnAoBO96J0e7dIcWc4qS8N0HkSdFlqKRIl1LOEs3ma4NpgJkOqPTZ5Nn+tV24V8YczncUrexkMpJsN4eeahp7MDRH4ev6frWcfHlkUmvRXNKvsshdsdsV2B/aVohS9+LrCVH9SKRRw0wMOc4xe27/APhGqSPtEZLd8U4ZTbxZJCWJjakBCykK1sgdxqG4/EPidiysWu91yK33yFfSgmGlkJcbCteXxrWLjSyR2TJKaTplmLVYrNak8tttcOIP9llKf7ClGoe+0lml/wATsWPy7DKEVyZPQ09tAVtJHd1pZ4wcRVYHw4ZvSWUybjJQhuMhXcpxQ7z6DvrCwTai17Lulf0SIe+sVWi8Xvjni2MMZ5c7rb5cEhLr9vDOi2g9e/4VPmBZHGyzEbdkEVJQ3MZCyjf4VdxH5EGrkwOC2u19CMk3QuCsgUUVxNhRWCoCtSo0BvRXPZooDvRRRQBUA/amsF6avuNZ5aILs9Fnc1IZbTzKCd73r9an6vBc7pbYTrcac+2hbw9lCv4q6Ysjxz2MyjsqI6wDjfjGXXiFZIsO5sXCQDzIdjEJQQNnavyqJftLotCeOtokZFDmyLQmKO3EZBKtemqspJfx20PocdTDjOuDaSEAHXnXee9ZS7HMz7qpcjoyVgHm+FdceeGOe0V2/cy4OUabI54AXDCJFiukTCoVzjR218zwmIIJUU+G6iHEsFdy7GOITTbK2rlDu5lQXCkg86eY6Hxq0P3+yW+CJaVx2GHFcvMhIAUe7XSu0SXaRBcnRnI6Y52XHE6A361VyXFycfdf0OnaVlePsYftJd3yl+6MutyVKQFlaCNkHR76VPtRsvO53gimmnFhMwcxSknXtVOFpm2d9p5+3uR+VPV1SABr1Nbw5NrvCe2YLMkNHQVy70fSj5N5upX+oLH8dRP4iJUrA7ylIJJhOaAH+mqf8H5PDS226OcrtN9Xem5nOhTDSuTWxy/1q51yvFqhyBDmymm3Fp3yK8jXmnu45AUz95bhtl7q3+7HtfCph5CxxcWvP2Jw2dkQfa2BmYFj7kRl1aFT2lABJJA141Fn2j8LuOMX5q42hh1VpvhbcfbQgkIdGt9B+tXFkIiORg4+22tlA5hzJBAHnXjlz7MtiKuU7HU3IP7jnAIV8K3h5bxJJLxZJYtrIt44XqRZ/s/Ro8VDqpc+KxFQlCSSNoG/7VCOZ8P85xLAcZyaRcGZUa2vtusRmWj2jPMQep117hVwX5lpejNKdUwtkudm3zAEc46aH6VpLuFoMB1yS6wqMysIXzAFKT5VMXKeJUl7tiWPYib7RE4337PBnx23FmS2yvlCST1I30qI5eJnBlcPMyiIlzGpSGvvTL4LiWlEDeh4d9WyfuNkTaUPuuMfclEJTtPsk+Wqy/OshtTct1yMqHvTaiAU78hTFyunHVLt3EsduyF/tepXMxjFXYzS3Equba/ZSToECvb9pfErrknCm2ybRHXIlWwtyCykbUtITo6HiamB6Ta3movbFlaHjpgLAOz6Vwm362xbi1bVuo7Vw8pGxpPlusR5Dgo0vBXC7+yueb8XmMv4Xpw20WK6OX+Y0iM6wYytNnuJ3U48GcdkYnw1s1kmdJLLG3R5KUSoj8t6pYcdsUOepKkxGZQR2itJAVy+dKbTiHWkuoUFIUAUnzFMmZSjpFUvJYwadtnQr8qwSTWhUB61gqNec2bk+dalXlWvU1kCgDmPlRR08qKUSz10UUUKFN+9WR24ZJBndqttlhpSVFCtEkkEflTgooBq3+zXFy6PyoTbL6ZMUxlB0/g9RXC74o/Mg2yIHR/6RojtN9QrXQj86eNFQDMFhureM22LytOy40jtXAVaCupP/NdU43MXj89ha20SZckSORP4E6I9n+lO6iqBsWm0Te3uEybHYQqQwGQwg+yQB4/Gu2F224W1h9qWeVkq/cNc/NyDy3ThrUq8qAauR2e5Sry+/FaYWzIihhSnD+DqTvX51wvePT1LsxiHtRBbKFntCgnevEfCngTRQHlltOPWt2OAAtbRTrfiRqmvOxaRMs1oguqSDEb0sg9ytdCKeVFANFjHZ3+CjbHnEGclwuoXvpzc2waxLxyYrCv2YgpVMU4l1xXNrauYE9fyp2lXlWpJNANa42SdNx+FCKi060+laj2hUQAfAmuSrFLTibVsLCHZDTqlJUF8p3skK3507a1KtVAN5VpuLrFl+8OpceiOFbyie/oRSfcsfuDsiZHbDKo8x9DpeUfbRo71TwJJ76wBVAzspxmXcp7suM4lDiWEoaUT3nxB9KdNuaWzAjsr/E20lJ15gar06FZq0SzXVbACjxopQAUUDuoNUhjVFZooD//Z" alt="Fondos Centenario" style="width:180px; height:auto; display:block;" />
+      </div>
+      <div class="hero-sub" style="margin-top:16px; margin-bottom:24px;">Soluciones de inversión para cada perfil, gestionadas con los más altos estándares.</div>
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        Regulado por BCU · Auditado por Deloitte
+      </div>
+    </div>
+    <div class="gold-divider"></div>
+
+    <div class="home-content">
+      <div class="section-title">Nuestros Fondos</div>
+      <div class="section-sub">Seleccioná un fondo para ver más información</div>
+      <div class="fondos-grid">
+        <div class="fondo-card-mini" onclick="showDetail(0)">
+          <div class="fondo-icon uyu">💵</div>
+          <div class="fondo-info">
+            <div class="fondo-name">Gestión de Liquidez Pesos</div>
+            <div class="risk-badge risk-low">Baja exposición al riesgo</div>
+          </div>
+          <div class="fondo-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+        </div>
+        <div class="fondo-card-mini" onclick="showDetail(1)">
+          <div class="fondo-icon usd">💲</div>
+          <div class="fondo-info">
+            <div class="fondo-name">Gestión Dólares</div>
+            <div class="risk-badge risk-low">Baja exposición al riesgo</div>
+          </div>
+          <div class="fondo-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+        </div>
+        <div class="fondo-card-mini" onclick="showDetail(2)">
+          <div class="fondo-icon idx">📈</div>
+          <div class="fondo-info">
+            <div class="fondo-name">Ahorro Indexado</div>
+            <div class="risk-badge risk-med">Baja a moderada exposición</div>
+          </div>
+          <div class="fondo-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+        </div>
+        <div class="fondo-card-mini" onclick="showDetail(3)">
+          <div class="fondo-icon act">🌐</div>
+          <div class="fondo-info">
+            <div class="fondo-name">Activo Dólar</div>
+            <div class="risk-badge risk-med">Moderada exposición al riesgo</div>
+          </div>
+          <div class="fondo-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+        </div>
+      </div>
+
+      <div class="partes-section">
+        <div class="section-title">Partes Intervinientes</div>
+        <div class="section-sub">Socios estratégicos de primer nivel</div>
+        <div class="partes-logos-grid">
+          <div class="parte-logo-card">
+            <img src="https://www.fondoscentenario.com.uy/wp-content/uploads/2016/04/logo_gletir.png" alt="Gletir" onerror="this.style.display='none';this.nextSibling.style.display='block'"/><span style="display:none;font-size:11px;font-weight:600;color:var(--text-primary)">Gletir</span>
+            <div class="parte-logo-rol">Gestor</div>
+          </div>
+          <div class="parte-logo-card">
+            <img src="https://www.fondoscentenario.com.uy/wp-content/uploads/2016/04/logo_valo.png" alt="Valores AFISA" onerror="this.style.display='none';this.nextSibling.style.display='block'"/><span style="display:none;font-size:11px;font-weight:600;color:var(--text-primary)">Valores AFISA</span>
+            <div class="parte-logo-rol">Administradora</div>
+          </div>
+          <div class="parte-logo-card">
+            <img src="https://www.fondoscentenario.com.uy/wp-content/uploads/2022/03/logo_fitch-1.png" alt="Fix" onerror="this.style.display='none';this.nextSibling.style.display='block'"/><span style="display:none;font-size:11px;font-weight:600;color:var(--text-primary)">Fix SCR</span>
+            <div class="parte-logo-rol">Calificadora</div>
+          </div>
+          <div class="parte-logo-card">
+            <img src="https://www.fondoscentenario.com.uy/wp-content/uploads/2022/03/logo_deloitte-2.png" alt="Deloitte" onerror="this.style.display='none';this.nextSibling.style.display='block'"/><span style="display:none;font-size:11px;font-weight:600;color:var(--text-primary)">Deloitte</span>
+            <div class="parte-logo-rol">Auditor</div>
+          </div>
+          <div class="parte-logo-card" style="grid-column:1/-1">
+            <img src="https://www.fondoscentenario.com.uy/wp-content/uploads/2022/03/logo_guyer-2.png" alt="Guyer & Regules" onerror="this.style.display='none';this.nextSibling.style.display='block'"/><span style="display:none;font-size:11px;font-weight:600;color:var(--text-primary)">Guyer & Regules</span>
+            <div class="parte-logo-rol">Asesor Legal</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FONDOS LIST -->
+  <div class="screen" id="screen-fondos">
+    <div class="screen-header">
+      <h1>Nuestros Fondos</h1>
+      <p>4 alternativas de inversión disponibles</p>
+    </div>
+    <div class="fondos-list">
+      <div class="fondo-card-full" onclick="showDetail(0)">
+        <div class="fondo-card-header">
+          <div class="fondo-card-header-top">
+            <div class="fondo-card-icon uyu">💵</div>
+            <div>
+              <div class="fondo-card-title">Fondo Centenario Gestión de Liquidez Pesos</div>
+              <div class="risk-badge risk-low" style="margin-top:6px">Baja exposición al riesgo</div>
+            </div>
+          </div>
+        </div>
+        <div class="fondo-card-desc">Gestiona el exceso de liquidez de corto plazo en pesos uruguayos, optimizando rendimiento a través de instrumentos de muy bajo riesgo.</div>
+        <div class="fondo-card-footer">
+          <span class="footer-label">Moneda: Pesos Uruguayos</span>
+          <span class="ver-mas">Ver más <svg viewBox="0 0 24 24" fill="none" stroke-width="2" style="width:14px;height:14px;stroke:var(--navy)"><path d="M9 18l6-6-6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="fondo-card-full" onclick="showDetail(1)">
+        <div class="fondo-card-header">
+          <div class="fondo-card-header-top">
+            <div class="fondo-card-icon usd">💲</div>
+            <div>
+              <div class="fondo-card-title">Fondo Centenario Gestión Dólares</div>
+              <div class="risk-badge risk-low" style="margin-top:6px">Baja exposición al riesgo</div>
+            </div>
+          </div>
+        </div>
+        <div class="fondo-card-desc">Gestiona ahorros de corto plazo en dólares, invirtiendo principalmente en valores del gobierno estadounidense.</div>
+        <div class="fondo-card-footer">
+          <span class="footer-label">Moneda: Dólar Estadounidense</span>
+          <span class="ver-mas">Ver más <svg viewBox="0 0 24 24" fill="none" stroke-width="2" style="width:14px;height:14px;stroke:var(--navy)"><path d="M9 18l6-6-6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="fondo-card-full" onclick="showDetail(2)">
+        <div class="fondo-card-header">
+          <div class="fondo-card-header-top">
+            <div class="fondo-card-icon idx">📈</div>
+            <div>
+              <div class="fondo-card-title">Fondo Centenario Ahorro Indexado</div>
+              <div class="risk-badge risk-med" style="margin-top:6px">Baja a moderada exposición</div>
+            </div>
+          </div>
+        </div>
+        <div class="fondo-card-desc">Preserva el poder adquisitivo en pesos uruguayos aspirando a obtener rendimientos reales positivos a mediano plazo.</div>
+        <div class="fondo-card-footer">
+          <span class="footer-label">Moneda: Pesos / UI / USD</span>
+          <span class="ver-mas">Ver más <svg viewBox="0 0 24 24" fill="none" stroke-width="2" style="width:14px;height:14px;stroke:var(--navy)"><path d="M9 18l6-6-6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="fondo-card-full" onclick="showDetail(3)">
+        <div class="fondo-card-header">
+          <div class="fondo-card-header-top">
+            <div class="fondo-card-icon act">🌐</div>
+            <div>
+              <div class="fondo-card-title">Fondo Centenario Activo Dólar</div>
+              <div class="risk-badge risk-med" style="margin-top:6px">Moderada exposición al riesgo</div>
+            </div>
+          </div>
+        </div>
+        <div class="fondo-card-desc">Obtiene retornos superiores a bonos de países desarrollados mediante portafolio diversificado de renta fija soberana y corporativa en dólares.</div>
+        <div class="fondo-card-footer">
+          <span class="footer-label">Moneda: Dólar Estadounidense</span>
+          <span class="ver-mas">Ver más <svg viewBox="0 0 24 24" fill="none" stroke-width="2" style="width:14px;height:14px;stroke:var(--navy)"><path d="M9 18l6-6-6-6"/></svg></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAIL -->
+  <div class="screen" id="screen-detail">
+    <div class="detail-hero">
+      <div class="back-btn" onclick="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        Volver
+      </div>
+      <div class="detail-icon-wrap">
+        <div class="detail-icon" id="detail-icon"></div>
+        <div class="detail-title" id="detail-title"></div>
+      </div>
+      <div class="detail-risk-wrap" id="detail-risk"></div>
+    </div>
+    <div class="gold-divider"></div>
+    <div class="detail-content">
+      <div class="detail-section">
+        <div class="detail-section-title">Descripción</div>
+        <div class="detail-desc" id="detail-desc"></div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Documentos</div>
+        <div class="docs-grid" id="detail-docs"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACTO -->
+  <div class="screen" id="screen-contacto">
+    <div class="info-header">
+      <h1>Contacto</h1>
+      <p>Estamos para ayudarte</p>
+    </div>
+    <div class="gold-divider"></div>
+    <div class="info-content">
+      <div class="info-card">
+        <div class="info-card-title">Fondos Centenario</div>
+        <div class="contact-row">
+          <div class="contact-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="contact-info-text">
+            <div class="label">Dirección</div>
+            <div class="value">Dr. Luis Bonavita 1266 WTC T4, Oficina 2605, Montevideo</div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="contact-info-text">
+            <div class="label">Email</div>
+            <div class="value">contacto@fondoscentenario.com.uy</div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+          </div>
+          <div class="contact-info-text">
+            <div class="label">Web</div>
+            <div class="value">www.fondoscentenario.com.uy</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-title">Partes Intervinientes</div>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Socios estratégicos de primer nivel</p>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div class="parte-logo-row">
+            <div class="parte-logo-info"><div class="parte-row-rol">Gestor de Portafolio</div><div class="parte-row-nombre">Gletir Corredor de Bolsa</div></div>
+            <img src="https://www.fondoscentenario.com.uy/wp-content/uploads/2016/04/logo_gletir.png" alt="Gletir" class="parte-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/><span class="parte-logo-fallback" style="display:none">Gletir</span>
+          </div>
+          <div class="parte-logo-row">
+            <div class="parte-logo-info"><div class="parte-row-rol">Sociedad Administradora</div><div class="parte-row-nombre">Valores AFISA</div></div>
+            <img src="https://www.fondoscentenario.com.uy/wp-content/uploads/2016/04/logo_valo.png" alt="Valores AFISA" class="parte-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/><span class="parte-logo-fallback" style="display:none">Valo</span>
+          </div>
+          <div class="parte-logo-row">
+            <div class="parte-logo-info"><div class="parte-row-rol">Calificadora</div><div class="parte-row-nombre">Fix / FIX SCR</div></div>
+            <img src="https://www.fondoscentenario.com.uy/wp-content/uploads/2022/03/logo_fitch-1.png" alt="Fix" class="parte-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/><span class="parte-logo-fallback" style="display:none">Fix</span>
+          </div>
+          <div class="parte-logo-row">
+            <div class="parte-logo-info"><div class="parte-row-rol">Auditor</div><div class="parte-row-nombre">Deloitte</div></div>
+            <img src="https://www.fondoscentenario.com.uy/wp-content/uploads/2022/03/logo_deloitte-2.png" alt="Deloitte" class="parte-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/><span class="parte-logo-fallback" style="display:none">Deloitte</span>
+          </div>
+          <div class="parte-logo-row">
+            <div class="parte-logo-info"><div class="parte-row-rol">Asesor Legal</div><div class="parte-row-nombre">Guyer & Regules</div></div>
+            <img src="https://www.fondoscentenario.com.uy/wp-content/uploads/2022/03/logo_guyer-2.png" alt="Guyer & Regules" class="parte-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/><span class="parte-logo-fallback" style="display:none">Guyer</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-title">Sobre Fondos Centenario</div>
+        <p>Fondos Centenario ofrece alternativas de inversión gestionadas por Gletir Corredor de Bolsa, con el objetivo de rentabilizar el ahorro de inversores uruguayos en pesos y dólares, a través de instrumentos de oferta pública regulados por el BCU.</p>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <div class="nav-item active" id="nav-home" onclick="navigate('home')">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <span class="nav-label">Inicio</span>
+    </div>
+    <div class="nav-item" id="nav-fondos" onclick="navigate('fondos')">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div>
+      <span class="nav-label">Fondos</span>
+    </div>
+    <div class="nav-item" id="nav-contacto" onclick="navigate('contacto')">
+      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 1.18 2 2 0 014 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+      <span class="nav-label">Contacto</span>
+    </div>
+  </nav>
+</div>
+
+<script>
+const fondos = [
+  {
+    icon: '💵',
+    iconClass: 'uyu',
+    title: 'FC Gestión de Liquidez Pesos',
+    risk: 'Baja exposición al riesgo',
+    riskClass: 'risk-low',
+    moneda: 'Pesos Uruguayos',
+    desc: 'Gestiona el exceso de liquidez de corto plazo en pesos uruguayos, optimizando el rendimiento a través de instrumentos de muy bajo riesgo. Invierte principalmente en valores de oferta pública emitidos por el Estado Uruguayo y/o el Banco Central del Uruguay.',
+    docs: [
+      { name: 'Factsheet', type: 'PDF · Abril 2026', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2026/05/FS_FCGL_2026.04.pdf' },
+      { name: 'Prospecto', type: 'PDF · Documento oficial', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2022/09/Fondo-Centenario-Gestion-de-Liquidez-WEB_SET.pdf' },
+      { name: 'Reglamento de Gestión', type: 'PDF · Documento legal', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2022/09/Reglamento-de-Fondo-Centenario-Gestion-de-Liquidez.-6.9.-cleandocx.pdf' },
+      { name: 'Informe Calificadora (Fix)', type: 'PDF · Rating 2025', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2025/11/FIX_Fondo-Centenario-Gestion-de-Liquidez-Fondo-de-Inversion-2025.pdf' },
+    ]
+  },
+  {
+    icon: '💲',
+    iconClass: 'usd',
+    title: 'FC Gestión Dólares',
+    risk: 'Baja exposición al riesgo',
+    riskClass: 'risk-low',
+    moneda: 'Dólar Estadounidense',
+    desc: 'Gestiona los ahorros de corto plazo en dólares estadounidenses, optimizando el rendimiento a través de instrumentos de bajo riesgo. Invierte principalmente en valores de oferta pública emitidos por el gobierno estadounidense.',
+    docs: [
+      { name: 'Factsheet', type: 'PDF · Abril 2026', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2026/05/FS_FCGD_2026.04.pdf' },
+      { name: 'Prospecto', type: 'PDF · Documento oficial', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2023/02/Prospecto-Fondo-Centenario-Gestion-Dolares.pdf' },
+      { name: 'Reglamento de Gestión', type: 'PDF · Documento legal', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2023/02/Reglamento-de-Gestion-Fondo-Centenario-Gestion-Dolares.pdf' },
+      { name: 'Informe Calificadora (Fix)', type: 'PDF · Rating 2025', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2025/11/FIX_Fondo-Centenario-Gestion-Dolares-Fondo-de-Inversion-2025.pdf' },
+    ]
+  },
+  {
+    icon: '📈',
+    iconClass: 'idx',
+    title: 'FC Ahorro Indexado',
+    risk: 'Baja a moderada exposición al riesgo',
+    riskClass: 'risk-med',
+    moneda: 'Pesos / UI / USD',
+    desc: 'Gestiona los ahorros con el objetivo de preservar el poder adquisitivo en pesos uruguayos, aspirando a obtener rendimientos reales positivos en un horizonte temporal de mediano plazo. Invierte en valores de oferta pública emitidos por personas públicas uruguayas, incluyendo bonos en pesos, unidades indexadas y dólares americanos.',
+    docs: [
+      { name: 'Factsheet', type: 'PDF · Abril 2026', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2026/05/FS_FCAI_2026.04.pdf' },
+      { name: 'Prospecto', type: 'PDF · Oct 2025', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2025/11/Prospecto_FCAI-Modificado-oct-2025.pdf' },
+      { name: 'Reglamento de Gestión', type: 'PDF · Oct 2025', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2025/11/FCAI_Reglamento-Modificado-oct2025.pdf' },
+      { name: 'Informe Calificadora (Fix)', type: 'PDF · Rating 2025', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2025/11/FIX_Fondo-Centenario-Ahorro-Indexado-Fondo-de-Inversion-2025.pdf' },
+    ]
+  },
+  {
+    icon: '🌐',
+    iconClass: 'act',
+    title: 'FC Activo Dólar',
+    risk: 'Moderada exposición al riesgo',
+    riskClass: 'risk-med',
+    moneda: 'Dólar Estadounidense',
+    desc: 'Gestiona los ahorros con el objetivo de obtener retornos superiores a los bonos de países desarrollados, invirtiendo en un portafolio diversificado, preferentemente en instrumentos de renta fija soberanos y corporativos en dólares de alta calidad crediticia. Invertirá en emisiones del Tesoro estadounidense, títulos soberanos y corporativos uruguayos, y fondos mutuos diversificados globales.',
+    docs: [
+      { name: 'Factsheet', type: 'PDF · Abril 2026', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2026/05/FS_FCAD_2026.04.pdf' },
+      { name: 'Prospecto', type: 'PDF · Documento oficial', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2025/06/Prospecto-Fondo-Centenario-Activo-Dolar-BCU.UV_.pdf' },
+      { name: 'Reglamento de Gestión', type: 'PDF · Documento legal', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2025/06/Reglamento-de-Gestion-Fondo-Centenario-Activo-Dolar-final.pdf' },
+      { name: "Informe Calificadora (Moody's)", type: 'PDF · Rating Abr 2026', url: 'https://www.fondoscentenario.com.uy/wp-content/uploads/2026/05/Moodys-Calificacion-Centenario-Activo-Dolar-22042026.pdf' },
+    ]
+  }
+];
+
+let prevScreen = 'home';
+
+function navigate(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('screen-' + screen).classList.add('active');
+  document.getElementById('screen-' + screen).scrollTop = 0;
+  const navEl = document.getElementById('nav-' + screen);
+  if (navEl) navEl.classList.add('active');
+  prevScreen = screen;
+}
+
+function showDetail(idx) {
+  const f = fondos[idx];
+  document.getElementById('detail-icon').className = 'detail-icon ' + f.iconClass;
+  document.getElementById('detail-icon').textContent = f.icon;
+  document.getElementById('detail-title').textContent = 'Fondo Centenario ' + f.title.replace('FC ','');
+  document.getElementById('detail-risk').innerHTML = `<span class="risk-badge ${f.riskClass}">${f.risk}</span>`;
+  document.getElementById('detail-desc').textContent = f.desc;
+
+  const docsEl = document.getElementById('detail-docs');
+  docsEl.innerHTML = f.docs.map(d => `
+    <a class="doc-btn" href="${d.url}" target="_blank">
+      <div class="doc-icon">📄</div>
+      <div class="doc-info">
+        <div class="doc-name">${d.name}</div>
+        <div class="doc-type">${d.type}</div>
+      </div>
+      <div class="doc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
+    </a>
+  `).join('');
+
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('screen-detail').classList.add('active');
+  document.getElementById('screen-detail').scrollTop = 0;
+}
+
+function goBack() {
+  navigate('fondos');
+}
+</script>
+</body>
+</html>
