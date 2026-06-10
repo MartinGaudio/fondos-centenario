@@ -514,6 +514,53 @@ body {
 .plr-logo { height:52px; width:auto; max-width:140px; object-fit:contain; }
 
 .about-text { font-size:13px; line-height:1.75; color:var(--txt2); }
+
+.form-group {
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.form-input {
+  width:100%;
+  padding:13px 16px;
+  border:1.5px solid var(--border);
+  border-radius:var(--rs);
+  font-family:'Outfit',sans-serif;
+  font-size:14px;
+  color:var(--txt1);
+  background:var(--cream);
+  outline:none;
+  transition:border-color 0.2s;
+}
+.form-input:focus { border-color:var(--gold); background:white; }
+.form-input::placeholder { color:var(--txt3); }
+textarea.form-input { resize:none; height:110px; }
+.form-submit {
+  width:100%;
+  padding:15px;
+  background:var(--navy);
+  color:white;
+  border:none;
+  border-radius:var(--rs);
+  font-family:'Outfit',sans-serif;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:background 0.2s;
+}
+.form-submit:active { background:var(--navy2); }
+.form-success {
+  display:none;
+  text-align:center;
+  padding:20px;
+  background:var(--greenl);
+  border-radius:var(--rs);
+  color:var(--green);
+  font-weight:600;
+  font-size:14px;
+}
 </style>
 </head>
 <body>
@@ -739,6 +786,19 @@ body {
         <div class="ccard-title">Sobre Fondos Centenario</div>
         <p class="about-text">Fondos Centenario ofrece alternativas de inversión gestionadas por Gletir Corredor de Bolsa, con el objetivo de rentabilizar el ahorro de inversores uruguayos en pesos y dólares, a través de instrumentos de oferta pública regulados por el BCU.</p>
       </div>
+
+      <div class="ccard">
+        <div class="ccard-title">Envianos tu consulta</div>
+        <p style="font-size:12px;color:var(--txt3);margin-bottom:16px;">Completá el formulario y nos ponemos en contacto a la brevedad.</p>
+        <div class="form-success" id="form-success">✓ &nbsp;¡Mensaje enviado! Te contactaremos pronto.</div>
+        <div class="form-group" id="form-group">
+          <input class="form-input" type="text" id="f-name" placeholder="Nombre *" required />
+          <input class="form-input" type="email" id="f-email" placeholder="Email *" required />
+          <input class="form-input" type="tel" id="f-phone" placeholder="Teléfono" />
+          <textarea class="form-input" id="f-message" placeholder="Mensaje *" required></textarea>
+          <button class="form-submit" onclick="submitForm()">Enviar mensaje</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -828,6 +888,43 @@ function showDetail(i) {
 }
 
 function goBack() { nav('fondos'); }
+
+async function submitForm() {
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const message = document.getElementById('f-message').value.trim();
+
+  if (!name || !email || !message) {
+    alert('Por favor completá Nombre, Email y Mensaje.');
+    return;
+  }
+
+  const btn = document.querySelector('.form-submit');
+  btn.textContent = 'Enviando...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('https://formspree.io/f/xzdqabbe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ name, email, phone, message })
+    });
+
+    if (res.ok) {
+      document.getElementById('form-group').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+    } else {
+      alert('Hubo un error. Intentá de nuevo.');
+      btn.textContent = 'Enviar mensaje';
+      btn.disabled = false;
+    }
+  } catch(e) {
+    alert('Hubo un error. Intentá de nuevo.');
+    btn.textContent = 'Enviar mensaje';
+    btn.disabled = false;
+  }
+}
 </script>
 </body>
 </html>
