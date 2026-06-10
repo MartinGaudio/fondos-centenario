@@ -242,7 +242,7 @@ body {
   flex-direction:column;
   align-items:center;
   gap:8px;
-  min-height:80px;
+  min-height:165px;
   justify-content:center;
 }
 .plcard img {
@@ -346,7 +346,7 @@ body {
 ═══════════════════════════════ */
 .detail-hero {
   background:var(--navy);
-  padding:20px 24px 30px;
+  padding:0;
   position:relative;
   overflow:hidden;
 }
@@ -362,21 +362,39 @@ body {
   display:inline-flex;
   align-items:center;
   gap:6px;
-  color:rgba(255,255,255,0.6);
+  color:rgba(255,255,255,0.85);
   font-size:13px;
   cursor:pointer;
-  margin-bottom:20px;
-  font-weight:400;
+  font-weight:500;
+  position:absolute;
+  top:20px;
+  left:20px;
+  z-index:10;
+  background:rgba(0,0,0,0.3);
+  padding:6px 12px;
+  border-radius:20px;
+  backdrop-filter:blur(4px);
 }
 .back-btn svg { width:16px; height:16px; stroke:rgba(255,255,255,0.6); stroke-width:2; }
 .detail-icon-bg {
-  width:56px; height:56px;
-  border-radius:16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:26px;
-  margin-bottom:14px;
+  width:100%;
+  height:180px;
+  border-radius:0;
+  overflow:hidden;
+  margin-bottom:16px;
+  position:relative;
+}
+.detail-icon-bg img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.detail-icon-bg::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom, transparent 40%, rgba(13,31,53,0.7));
 }
 .detail-title {
   font-family:'Cormorant Garamond',serif;
@@ -385,8 +403,7 @@ body {
   color:white;
   line-height:1.2;
   margin-bottom:12px;
-  position:relative;
-  z-index:1;
+  padding:16px 24px 0;
 }
 
 .dcontent { padding:20px; }
@@ -487,14 +504,14 @@ body {
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:12px 0;
+  padding:14px 0;
   border-bottom:1px solid var(--border);
 }
 .parte-logo-row:last-child { border-bottom:none; padding-bottom:0; }
 .plr-info { }
 .plr-rol { font-size:10px; color:var(--txt3); text-transform:uppercase; letter-spacing:0.8px; font-weight:600; margin-bottom:2px; }
 .plr-nombre { font-size:13px; font-weight:600; color:var(--txt1); }
-.plr-logo { height:24px; width:auto; max-width:80px; object-fit:contain; }
+.plr-logo { height:52px; width:auto; max-width:140px; object-fit:contain; }
 
 .about-text { font-size:13px; line-height:1.75; color:var(--txt2); }
 </style>
@@ -512,7 +529,7 @@ body {
         <span style="font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-family:'Outfit',sans-serif;">Gletir Corredor de Bolsa</span>
       </div>
       <div class="hero-headline" style="position:relative;z-index:2;">Fondos<br><em>Centenario</em></div>
-        <div class="hero-sub" style="position:relative;z-index:2;">Soluciones de inversión para cada perfil, gestionadas con los más altos estándares regulatorios.</div>
+        <div class="hero-sub" style="position:relative;z-index:2;font-weight:600;color:rgba(255,255,255,0.85);">Soluciones de inversión para cada perfil, gestionadas con los más altos estándares regulatorios.</div>
         <div class="hero-badges" style="position:relative;z-index:2;">
           <div class="hbadge"><div class="hbadge-dot"></div>Regulado BCU</div>
           <div class="hbadge"><div class="hbadge-dot"></div>Auditado Deloitte</div>
@@ -620,7 +637,7 @@ body {
         <div class="fcard-full-body">
           <div class="fcard-full-title">Fondo Centenario Ahorro Indexado</div>
           <div class="fcard-full-footer">
-            <span class="fcard-moneda">Pesos / UI / USD</span>
+            <span class="fcard-moneda">Pesos / UI</span>
             <span class="fcard-vmas">Ver más <svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6"/></svg></span>
           </div>
         </div>
@@ -646,7 +663,7 @@ body {
       </div>
       <div class="detail-icon-bg" id="d-icon"></div>
       <div class="detail-title" id="d-title"></div>
-      <div id="d-risk"></div>
+      <div id="d-risk" style="padding:0 24px 20px;"></div>
     </div>
     <div class="gold-line"></div>
     <div class="dcontent">
@@ -674,7 +691,7 @@ body {
         <div class="ccard-title">Información de Contacto</div>
         <div class="crow">
           <div class="crow-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-          <div><div class="crow-label">Dirección</div><div class="crow-val">Dr. Luis Bonavita 1266 WTC T4, Oficina 2605, Montevideo</div></div>
+          <div><div class="crow-label">Dirección</div><div class="crow-val">Dr. Luis Bonavita 1294, World Trade Center, Torre 4, Piso 26, Montevideo, Uruguay</div></div>
         </div>
         <div class="crow">
           <div class="crow-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
@@ -683,6 +700,14 @@ body {
         <div class="crow">
           <div class="crow-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg></div>
           <div><div class="crow-label">Web</div><div class="crow-val">www.fondoscentenario.com.uy</div></div>
+        </div>
+        <div class="crow">
+          <div class="crow-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg></div>
+          <div><div class="crow-label">YouTube</div><a href="https://youtube.com/@gletircorredordebolsa" target="_blank" style="text-decoration:none"><div class="crow-val" style="color:var(--navy)">@gletircorredordebolsa</div></a></div>
+        </div>
+        <div class="crow">
+          <div class="crow-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+          <div><div class="crow-label">Instagram</div><a href="https://www.instagram.com/gletiruy" target="_blank" style="text-decoration:none"><div class="crow-val" style="color:var(--navy)">@gletiruy</div></a></div>
         </div>
       </div>
 
@@ -736,7 +761,7 @@ body {
 
 <script>
 const fondos = [
-  { icon:'💵', bg:'#EFF6FF', title:'FC Gestión de Liquidez Pesos', risk:'Baja exposición al riesgo', rc:'rlow',
+  { icon:'💵', bg:'#EFF6FF', img:'https://www.fondoscentenario.com.uy/wp-content/uploads/2024/08/foto_gestionliquidez.png', imgbg:'#0D1F35', title:'FC Gestión de Liquidez Pesos', risk:'Baja exposición al riesgo', rc:'rlow',
     desc:'Gestiona el exceso de liquidez de corto plazo en pesos uruguayos, optimizando el rendimiento a través de instrumentos de muy bajo riesgo. Invierte principalmente en valores de oferta pública emitidos por el Estado Uruguayo y/o el Banco Central del Uruguay.',
     docs:[
       {n:'Factsheet',t:'PDF · Abril 2026',u:'https://www.fondoscentenario.com.uy/wp-content/uploads/2026/05/FS_FCGL_2026.04.pdf'},
@@ -744,7 +769,7 @@ const fondos = [
       {n:'Reglamento de Gestión',t:'PDF · Documento legal',u:'https://www.fondoscentenario.com.uy/wp-content/uploads/2022/09/Reglamento-de-Fondo-Centenario-Gestion-de-Liquidez.-6.9.-cleandocx.pdf'},
       {n:'Informe Calificadora (Fix)',t:'PDF · Rating 2025',u:'https://www.fondoscentenario.com.uy/wp-content/uploads/2025/11/FIX_Fondo-Centenario-Gestion-de-Liquidez-Fondo-de-Inversion-2025.pdf'},
     ]},
-  { icon:'💲', bg:'#F0FDF4', title:'FC Gestión Dólares', risk:'Baja exposición al riesgo', rc:'rlow',
+  { icon:'💲', bg:'#F0FDF4', img:'https://www.fondoscentenario.com.uy/wp-content/uploads/2024/08/foto_gestiondolares.png', imgbg:'#0D3520', title:'FC Gestión Dólares', risk:'Baja exposición al riesgo', rc:'rlow',
     desc:'Gestiona los ahorros de corto plazo en dólares estadounidenses, optimizando el rendimiento a través de instrumentos de bajo riesgo. Invierte principalmente en valores de oferta pública emitidos por el gobierno estadounidense.',
     docs:[
       {n:'Factsheet',t:'PDF · Abril 2026',u:'https://www.fondoscentenario.com.uy/wp-content/uploads/2026/05/FS_FCGD_2026.04.pdf'},
@@ -752,7 +777,7 @@ const fondos = [
       {n:'Reglamento de Gestión',t:'PDF · Documento legal',u:'https://www.fondoscentenario.com.uy/wp-content/uploads/2023/02/Reglamento-de-Gestion-Fondo-Centenario-Gestion-Dolares.pdf'},
       {n:'Informe Calificadora (Fix)',t:'PDF · Rating 2025',u:'https://www.fondoscentenario.com.uy/wp-content/uploads/2025/11/FIX_Fondo-Centenario-Gestion-Dolares-Fondo-de-Inversion-2025.pdf'},
     ]},
-  { icon:'📈', bg:'#FFFBEB', title:'FC Ahorro Indexado', risk:'Baja a moderada exposición', rc:'rmed',
+  { icon:'📈', bg:'#FFFBEB', img:'https://www.fondoscentenario.com.uy/wp-content/uploads/2024/08/foto_ahorroindexado.png', imgbg:'#1F1A0D', title:'FC Ahorro Indexado', risk:'Baja a moderada exposición', rc:'rmed',
     desc:'Gestiona los ahorros con el objetivo de preservar el poder adquisitivo en pesos uruguayos, aspirando a obtener rendimientos reales positivos en un horizonte temporal de mediano plazo.',
     docs:[
       {n:'Factsheet',t:'PDF · Abril 2026',u:'https://www.fondoscentenario.com.uy/wp-content/uploads/2026/05/FS_FCAI_2026.04.pdf'},
@@ -760,7 +785,7 @@ const fondos = [
       {n:'Reglamento de Gestión',t:'PDF · Oct 2025',u:'https://www.fondoscentenario.com.uy/wp-content/uploads/2025/11/FCAI_Reglamento-Modificado-oct2025.pdf'},
       {n:'Informe Calificadora (Fix)',t:'PDF · Rating 2025',u:'https://www.fondoscentenario.com.uy/wp-content/uploads/2025/11/FIX_Fondo-Centenario-Ahorro-Indexado-Fondo-de-Inversion-2025.pdf'},
     ]},
-  { icon:'🌐', bg:'#FDF8EE', title:'FC Activo Dólar', risk:'Moderada exposición al riesgo', rc:'rmed',
+  { icon:'🌐', bg:'#FDF8EE', img:'https://www.fondoscentenario.com.uy/wp-content/uploads/2024/08/foto_gestiondolares.png', imgbg:'#1F0D35', title:'FC Activo Dólar', risk:'Moderada exposición al riesgo', rc:'rmed',
     desc:'Gestiona los ahorros con el objetivo de obtener retornos superiores a los bonos de países desarrollados, invirtiendo en un portafolio diversificado, preferentemente en instrumentos de renta fija soberanos y corporativos en dólares de alta calidad crediticia.',
     docs:[
       {n:'Factsheet',t:'PDF · Abril 2026',u:'https://www.fondoscentenario.com.uy/wp-content/uploads/2026/05/FS_FCAD_2026.04.pdf'},
@@ -785,8 +810,8 @@ function nav(s) {
 function showDetail(i) {
   const f = fondos[i];
   const di = document.getElementById('d-icon');
-  di.textContent = f.icon;
-  di.style.background = f.bg;
+  di.innerHTML = '<img src="' + f.img + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.style.background=f.imgbg" />';
+  di.style.background = f.imgbg;
   document.getElementById('d-title').textContent = 'Fondo Centenario ' + f.title.replace('FC ','');
   document.getElementById('d-risk').innerHTML = `<span class="risk-pill ${f.rc}">${f.risk}</span>`;
   document.getElementById('d-desc').textContent = f.desc;
